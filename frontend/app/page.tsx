@@ -48,8 +48,8 @@ export default function Home() {
   )
 
   return (
-    <div className={`${schoolbell.className} w-full px-4 py-6`}>
-      <div className="mb-4 text-2xl">My Daily Habit Tracker :)</div>
+    <div className={`${schoolbell.className} w-full px-10 py-6`}>
+      <div className="mt-2 mb-6 text-3xl font-semibold">My Daily Habit Tracker :)</div>
 
       <div className={"mt-2 flex flex-col gap-6 lg:flex-row"}>
         <div className="min-w-0 flex-1">
