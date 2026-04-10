@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Habit, Row
+from .models import Check, Habit, Row
 
 
 def _serialize_row(row):
@@ -138,3 +138,45 @@ def update_row_comment_api(request, row_id):
     row.save(update_fields=["row_text"])
     row = Row.objects.prefetch_related("check_set__habit").get(pk=row.pk)
     return JsonResponse({"row": _serialize_row(row)})
+
+
+@csrf_exempt
+def update_row_check_api(request, row_id):
+    if request.method not in ["PATCH", "POST"]:
+        return JsonResponse({"detail": "Method not allowed."}, status=405)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8")) if request.body else {}
+    except json.JSONDecodeError:
+        return JsonResponse({"detail": "Invalid JSON body."}, status=400)
+
+    habit_text = str(payload.get("habit", "")).strip()
+    if not habit_text:
+        return JsonResponse({"detail": "habit is required."}, status=400)
+
+    try:
+        row = Row.objects.get(pk=row_id)
+    except Row.DoesNotExist:
+        return JsonResponse({"detail": "Row not found."}, status=404)
+
+    try:
+        habit = Habit.objects.get(habit_text=habit_text)
+    except Habit.DoesNotExist:
+        return JsonResponse({"detail": "Habit not found."}, status=404)
+
+    check, _ = Check.objects.get_or_create(
+        row=row,
+        habit=habit,
+        defaults={"value": False},
+    )
+
+    if "value" in payload:
+        check.value = bool(payload.get("value"))
+    else:
+        # Toggle behavior for habit cell click.
+        check.value = not check.value
+
+    check.save(update_fields=["value"])
+
+    row = Row.objects.prefetch_related("check_set__habit").get(pk=row.pk)
+    return JsonResponse({"row": _serialize_row(row), "value": check.value})

@@ -42,6 +42,7 @@ export default function HabitChart({
         backgroundColor: '#111827',
         pointRadius: 4,
         pointHoverRadius: 5,
+        clip: 10,
         tension: 0.25
       }
     ]
@@ -59,7 +60,6 @@ export default function HabitChart({
       x: {
         display: false,
         reverse: true,
-        offset: false,
         ticks: {
           autoSkip: false
         }

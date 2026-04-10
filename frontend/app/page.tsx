@@ -1,7 +1,7 @@
 import { Schoolbell } from 'next/font/google'
 import Link from 'next/link'
-import HabitChart from './chart'
-import { Habit, HabitsSummaryResponse, Row } from './types'
+import HabitTable from './habit-table'
+import { HabitsSummaryResponse } from './types'
 
 const schoolbell = Schoolbell({
   weight: '400'
@@ -43,11 +43,6 @@ export default async function Home({ searchParams }: HomeProps) {
   const normalizedMonth = Math.min(Math.max(requestedMonth, 1), 12)
 
   const data = await getSummaryData(requestedYear, normalizedMonth)
-  const habits: Habit[] = data.habits
-  const rows: Row[] = data.rows
-  const totalHabits = habits.length
-  const tableColumns = `56px minmax(300px, 5fr) repeat(${Math.max(totalHabits, 1)}, minmax(0, 1fr))`
-  const completedCounts = data.completed_counts
 
   const currentMonthDate = new Date(Date.UTC(data.year, data.month - 1, 1))
   const prevMonthDate = new Date(Date.UTC(data.year, data.month - 2, 1))
@@ -76,54 +71,12 @@ export default async function Home({ searchParams }: HomeProps) {
         </Link>
       </div>
 
-      <div className={"mt-2 flex flex-col gap-6 lg:flex-row"}>
-        <div className="min-w-0 flex-1">
-          <div
-            className="mb-2 grid gap-2 border-b border-gray-400 pb-2"
-            style={{ gridTemplateColumns: tableColumns }}
-          >
-            <div className="text-center font-semibold">Date</div>
-            <div className="font-semibold">Comments</div>
-            {habits.map((habit) => (
-              <div key={habit} className="text-center font-semibold capitalize">
-                {habit}
-              </div>
-            ))}
-          </div>
-
-          {rows.map((row) => (
-            <div
-              key={row.id}
-              className="grid border-b border-gray-200 py-[5px]"
-              style={{ gridTemplateColumns: tableColumns }}
-            >
-              <div className="text-center">
-                {new Date(`${row.date}T00:00:00`).getDate()}
-              </div>
-              <div className="min-w-0">
-                <p>{row.text}</p>
-              </div>
-
-              {habits.map((habit) => (
-                <div key={habit} className="text-center">
-                  {row.checks[habit] === true ? 'O' : row.checks[habit] === false ? 'X' : ''}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-
-        <div className="lg:w-64">
-          <div className="invisible font-semibold">Daily Comments</div>
-
-          <HabitChart
-            labels={rows.map((row) => row.date)}
-            values={completedCounts}
-            yMax={totalHabits}
-            rowUnitPx={rowUnitPx}
-          />
-        </div>
-      </div>
+      <HabitTable
+        habits={data.habits}
+        initialRows={data.rows}
+        backendBaseUrl={BACKEND_BASE_URL ?? 'http://127.0.0.1:8000'}
+        rowUnitPx={rowUnitPx}
+      />
     </div>
   )
 }
