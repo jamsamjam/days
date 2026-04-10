@@ -3,8 +3,16 @@
 ## Tech Stack
 
 Django
+Next.js
 PostgreSQL
 
-## Why Django?
+## Why Django AND Next.js?
 
-Django, a Python-based framework, is known for its "batteries-included" approach.
+
+## Notes
+
+permission denied for schema public
+
+GRANT ALL ON SCHEMA public TO daysuser;
+GRANT ALL PRIVILEGES ON DATABASE days TO daysuser;
+ALTER DATABASE days OWNER TO daysuser;

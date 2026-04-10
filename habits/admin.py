@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Habit, Row, Check
+
+admin.site.register(Row)
+admin.site.register(Habit)
+admin.site.register(Check)
