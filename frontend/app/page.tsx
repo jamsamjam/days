@@ -1,6 +1,7 @@
 import { Schoolbell } from 'next/font/google'
 import Link from 'next/link'
 import HabitTable from './habit-table'
+import Menu from './menu'
 import { HabitsSummaryResponse } from './types'
 
 const schoolbell = Schoolbell({
@@ -55,20 +56,24 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <div className={`${schoolbell.className} w-full px-10 py-6 ml-2`}>
-      <div className="mb-6 ml-1 flex items-center text-2xl font-semibold">
-        <Link
-          href={`/?year=${prevMonthDate.getUTCFullYear()}&month=${prevMonthDate.getUTCMonth() + 1}`}
-          className="hover:text-gray-400"
-        >
-          ←
-        </Link>
-        <div className="min-w-40 text-center font-semibold">{monthTitle}</div>
-        <Link
-          href={`/?year=${nextMonthDate.getUTCFullYear()}&month=${nextMonthDate.getUTCMonth() + 1}`}
-          className="hover:text-gray-400"
-        >
-          →
-        </Link>
+      <div className="mb-6 ml-1 flex items-start justify-between gap-4">
+        <div className="flex items-center text-2xl font-semibold">
+          <Link
+            href={`/?year=${prevMonthDate.getUTCFullYear()}&month=${prevMonthDate.getUTCMonth() + 1}`}
+            className="hover:text-gray-400"
+          >
+            ←
+          </Link>
+          <div className="min-w-40 text-center font-semibold">{monthTitle}</div>
+          <Link
+            href={`/?year=${nextMonthDate.getUTCFullYear()}&month=${nextMonthDate.getUTCMonth() + 1}`}
+            className="hover:text-gray-400"
+          >
+            →
+          </Link>
+        </div>
+
+        <Menu />
       </div>
 
       <HabitTable
