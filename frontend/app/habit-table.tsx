@@ -34,7 +34,7 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
       return
     }
 
-    const response = await fetch(`${backendBaseUrl}/habits/api/rows/${row.id}/comment/`, {
+    const response = await fetch(`${backendBaseUrl}/api/rows/${row.id}/comment/`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: nextText })
@@ -51,7 +51,7 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
   }
 
   const handleHabitClick = async (row: Row, habit: Habit) => {
-    const response = await fetch(`${backendBaseUrl}/habits/api/rows/${row.id}/check/`, {
+    const response = await fetch(`${backendBaseUrl}/api/rows/${row.id}/check/`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ habit })

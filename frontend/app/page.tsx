@@ -8,7 +8,7 @@ const schoolbell = Schoolbell({
   weight: '400'
 })
 
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL ?? 'http://127.0.0.1:8000'
 const rowUnitPx = 35.1
 
 function parsePositiveInt(value: string | undefined, fallback: number): number {
@@ -18,7 +18,7 @@ function parsePositiveInt(value: string | undefined, fallback: number): number {
 }
 
 async function getSummaryData(year: number, month: number): Promise<HabitsSummaryResponse> {
-  const response = await fetch(`${BACKEND_BASE_URL}/habits/api/summary/?year=${year}&month=${month}`, {
+  const response = await fetch(`${BACKEND_BASE_URL}/api/summary/?year=${year}&month=${month}`, {
     cache: 'no-store'
   })
 
