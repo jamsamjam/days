@@ -38,7 +38,7 @@ export default function HabitTable({
   const [habits, setHabits] = useState<Habit[]>(initialHabits)
   const [rows, setRows] = useState<Row[]>(initialRows)
 
-  const tableColumns = `56px minmax(300px, 5fr) repeat(${Math.max(habits.length, 1)}, minmax(0, 1fr))`
+  const tableColumns = `56px minmax(300px, 5fr) repeat(${Math.max(habits.length, 1)}, 72px)`
 
   useEffect(() => {
     let cancelled = false
@@ -161,8 +161,8 @@ export default function HabitTable({
   }
 
   return (
-    <div className={'mt-2 flex flex-col gap-6 lg:flex-row'}>
-      <div className="min-w-0 flex-1">
+    <div className={'mt-2 flex gap-6 overflow-x-auto'}>
+      <div className="min-w-max flex-1">
         <div
           className="mb-2 grid gap-2 border-b border-gray-400 pb-2"
           style={{ gridTemplateColumns: tableColumns }}
