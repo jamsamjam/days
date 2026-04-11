@@ -365,14 +365,15 @@ export default function Menu() {
             3. Use arrows to move between months.
           </p>
 
-            <div className="mb-2 mt-4 text-base font-semibold">Add/Delete Habit</div>
+          <div className="mt-4">
+            <div className="mb-2 text-base font-semibold">Add/Delete Habit</div>
 
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <input
                 value={habitName}
                 onChange={(event) => setHabitName(event.target.value)}
                 placeholder="New habit"
-                className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+                className="h-9 w-full rounded border border-gray-300 px-3 text-sm outline-none focus:border-gray-500"
               />
               <button
                 type="button"
@@ -380,23 +381,29 @@ export default function Menu() {
                   void handleHabitCreate()
                 }}
                 disabled={loading}
-                className="rounded bg-black px-3 py-2 text-sm text-white disabled:opacity-60"
+                className="h-9 rounded bg-black px-4 text-sm text-white disabled:opacity-60"
               >
                 Add
               </button>
             </div>
-            
-            <div className="space-y-2">
+
+            <div className="mt-3 space-y-2">
               {habits.map((habit) => (
-                <div key={habit.id} className="flex items-center justify-between gap-2">
-                  <p className="text-sm text-gray-700">{habit.name}</p>
+                <div
+                  key={habit.id}
+                  className="flex items-center justify-between gap-3 px-3 py-2"
+                >
+                  <p className="min-w-0 flex-1 truncate text-sm text-gray-700">
+                    {habit.name}
+                  </p>
+
                   <button
                     type="button"
                     onClick={() => {
                       void handleHabitDelete(habit)
                     }}
                     disabled={loading}
-                    className="rounded border border-gray-300 px-3 py-1 text-xs text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+                    className="rounded border border-gray-300 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60"
                   >
                     Delete
                   </button>
@@ -404,7 +411,10 @@ export default function Menu() {
               ))}
             </div>
 
-            {habitMessage && <p className="mt-2 text-xs text-gray-700">{habitMessage}</p>}
+            {habitMessage && (
+              <p className="mt-2 text-xs text-gray-700">{habitMessage}</p>
+            )}
+          </div>
         </div>
       )}
     </div>
