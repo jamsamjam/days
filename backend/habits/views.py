@@ -3,7 +3,6 @@ from calendar import monthrange
 from datetime import date
 
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
@@ -186,7 +185,6 @@ def update_row_check_api(request, row_id):
     return JsonResponse({"row": _serialize_row(row), "value": check.value})
 
 
-@csrf_exempt
 @login_required
 def create_habit_api(request):
     if request.method != "POST":
@@ -217,7 +215,6 @@ def create_habit_api(request):
     )
 
 
-@csrf_exempt
 @login_required
 def delete_habit_api(request, habit_id):
     if request.method != "DELETE":

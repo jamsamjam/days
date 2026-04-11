@@ -14,6 +14,19 @@ type HabitTableProps = {
   month: number
 }
 
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null
+
+  const cookies = document.cookie.split(';')
+  for (const cookie of cookies) {
+    const trimmed = cookie.trim()
+    if (trimmed.startsWith(`${name}=`)) {
+      return decodeURIComponent(trimmed.substring(name.length + 1))
+    }
+  }
+  return null
+}
+
 export default function HabitTable({
   habits: initialHabits,
   initialRows,
@@ -32,6 +45,12 @@ export default function HabitTable({
 
     async function loadSummary() {
       try {
+        await fetch(`${backendBaseUrl}/users/api/me/`, {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-store',
+        })
+
         const response = await fetch(
           `${backendBaseUrl}/api/summary/?year=${year}&month=${month}`,
           {
@@ -57,7 +76,7 @@ export default function HabitTable({
           setRows(data.rows)
         }
       } catch {
-        // mock data 유지
+        // mock data is used
       }
     }
 
@@ -90,11 +109,16 @@ export default function HabitTable({
       return
     }
 
+    const csrftoken = getCookie('csrftoken')
+
     const response = await fetch(`${backendBaseUrl}/api/rows/${row.id}/comment/`, {
       method: 'PATCH',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: nextText })
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken ?? '',
+      },
+      body: JSON.stringify({ text: nextText }),
     })
 
     if (!response.ok) {
@@ -112,11 +136,16 @@ export default function HabitTable({
       return
     }
 
+    const csrftoken = getCookie('csrftoken')
+
     const response = await fetch(`${backendBaseUrl}/api/rows/${row.id}/check/`, {
       method: 'PATCH',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ habit_id: habit.id })
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken ?? '',
+      },
+      body: JSON.stringify({ habit_id: habit.id }),
     })
 
     if (!response.ok) {

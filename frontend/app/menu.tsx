@@ -119,18 +119,22 @@ export default function Menu() {
     setMessage('')
 
     const path = mode === 'login' ? '/users/api/login/' : '/users/api/register/'
+    const csrftoken = getCookie('csrftoken')
 
     try {
       const response = await fetch(`${BACKEND_BASE_URL}${path}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken ?? '',
+        },
         body: JSON.stringify({ username, email, password }),
         credentials: 'include',
       })
 
       const data = await response.json().catch(() => ({}))
       if (!response.ok) {
-        setMessage(data.detail ?? 'Request failed.')
+        setMessage(data.detail ?? `Request failed. (${response.status})`)
         return
       }
 
@@ -145,15 +149,38 @@ export default function Menu() {
 
   async function handleLogout() {
     setLoading(true)
+    setMessage('')
+
+    const csrftoken = getCookie('csrftoken')
+    console.log('logout csrftoken:', csrftoken)
+    console.log('frontend origin:', window.location.origin)
 
     try {
-      await fetch(`${BACKEND_BASE_URL}/users/api/logout/`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/users/api/logout/`, {
         method: 'POST',
         credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken ?? '',
+        },
+        body: JSON.stringify({}),
       })
-    } catch {}
 
-    window.location.reload()
+      const text = await response.text()
+      console.log('logout status:', response.status)
+      console.log('logout raw response:', text)
+
+      if (!response.ok) {
+        setMessage(`Logout failed. (${response.status})`)
+        return
+      }
+
+      window.location.reload()
+    } catch {
+      setMessage('Network error.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function handleHabitCreate() {

@@ -5,7 +5,7 @@ from .models import Check, Habit, Row
 
 
 def _create_checks_if_commented(row):
-    if not row.row_text.strip():
+    if not row.comment.strip():
         return
 
     habits = Habit.objects.all()

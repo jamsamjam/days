@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 User = get_user_model()
@@ -18,7 +18,6 @@ def _parse_body(request):
         return None
 
 
-@csrf_exempt
 def register_api(request):
     if request.method != "POST":
         return JsonResponse({"detail": "Method not allowed."}, status=405)
@@ -64,7 +63,6 @@ def register_api(request):
     )
 
 
-@csrf_exempt
 def login_api(request):
     if request.method != "POST":
         return JsonResponse({"detail": "Method not allowed."}, status=405)
@@ -84,7 +82,6 @@ def login_api(request):
     return JsonResponse({"user": {"id": user.id, "username": user.username, "email": user.email}})
 
 
-@csrf_exempt
 def logout_api(request):
     if request.method != "POST":
         return JsonResponse({"detail": "Method not allowed."}, status=405)
@@ -93,6 +90,7 @@ def logout_api(request):
     return JsonResponse({"detail": "Logged out."})
 
 
+@ensure_csrf_cookie
 def me_api(request):
     if request.method != "GET":
         return JsonResponse({"detail": "Method not allowed."}, status=405)
