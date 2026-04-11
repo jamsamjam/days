@@ -8,7 +8,7 @@ const schoolbell = Schoolbell({
   weight: '400'
 })
 
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL ?? 'http://127.0.0.1:8000'
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL
 const rowUnitPx = 35.1
 
 function parsePositiveInt(value: string | undefined, fallback: number): number {
