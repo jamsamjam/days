@@ -8,8 +8,8 @@ def _create_checks_if_commented(row):
     if not row.comment.strip():
         return
 
-    habits = Habit.objects.all()
-    checks = [Check(row=row, habit=habit, value=False) for habit in habits]
+    habits = Habit.objects.filter(user=row.user)
+    checks = [Check(daily_record=row, habit=habit, value=False) for habit in habits]
     Check.objects.bulk_create(checks, ignore_conflicts=True)
 
 

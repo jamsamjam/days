@@ -122,6 +122,8 @@ export default function HabitTable({
     })
 
     if (!response.ok) {
+      // const errorText = await response.text()
+      // console.log('comment error raw:', errorText)
       return
     }
 
