@@ -3,6 +3,8 @@ import json
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.contrib.auth.password_validation import validate_password
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -38,13 +40,25 @@ def register_api(request):
     except ValidationError:
         return JsonResponse({"detail": "Invalid email format."}, status=400)
 
-    if User.objects.filter(username=username).exists():
-        return JsonResponse({"detail": "Username already exists."}, status=409)
-
     if User.objects.filter(email__iexact=email).exists():
         return JsonResponse({"detail": "Email already exists."}, status=409)
 
-    user = User.objects.create_user(username=username, email=email, password=password)
+    try:
+        validate_password(password)
+    except ValidationError as exc:
+        return JsonResponse(
+            {
+                "detail": " ".join(exc.messages),
+                "errors": exc.messages,
+            },
+            status=400,
+        )
+
+    try:
+        user = User.objects.create_user(username=username, email=email, password=password)
+    except IntegrityError:
+        return JsonResponse({"detail": "Username is unavailable."}, status=409)
+
     login(request, user)
     return JsonResponse(
         {"user": {"id": user.id, "username": user.username, "email": user.email}},

@@ -42,7 +42,10 @@ export default function Menu() {
 
       const data = await response.json().catch(() => ({}))
       if (!response.ok) {
-        setMessage(data.detail ?? 'Request failed.')
+        const detailedMessage = Array.isArray(data.errors) && data.errors.length > 0
+          ? data.errors.join(' ')
+          : (data.detail ?? 'Request failed.')
+        setMessage(detailedMessage)
         return
       }
 
