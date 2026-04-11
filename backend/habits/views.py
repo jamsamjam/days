@@ -3,6 +3,7 @@ from calendar import monthrange
 from datetime import date
 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
@@ -183,3 +184,46 @@ def update_row_check_api(request, row_id):
         .get()
     )
     return JsonResponse({"row": _serialize_row(row), "value": check.value})
+
+
+@csrf_exempt
+@login_required
+def create_habit_api(request):
+    if request.method != "POST":
+        return JsonResponse({"detail": "Method not allowed."}, status=405)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8")) if request.body else {}
+    except json.JSONDecodeError:
+        return JsonResponse({"detail": "Invalid JSON body."}, status=400)
+
+    name = str(payload.get("name", "")).strip()
+    if not name:
+        return JsonResponse({"detail": "name is required."}, status=400)
+
+    if Habit.objects.filter(user=request.user, name__iexact=name).exists():
+        return JsonResponse({"detail": "Habit already exists."}, status=409)
+
+    habit = Habit.objects.create(user=request.user, name=name)
+
+    return JsonResponse(
+        {
+            "habit": {
+                "id": habit.id,
+                "name": habit.name,
+            }
+        },
+        status=201,
+    )
+
+
+@csrf_exempt
+@login_required
+def delete_habit_api(request, habit_id):
+    if request.method != "DELETE":
+        return JsonResponse({"detail": "Method not allowed."}, status=405)
+
+    habit = get_object_or_404(Habit, pk=habit_id, user=request.user)
+    habit.delete()
+
+    return JsonResponse({"detail": "Habit deleted."})

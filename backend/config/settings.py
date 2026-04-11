@@ -148,6 +148,7 @@ CORS_ALLOW_METHODS = [
 CORS_ALLOW_HEADERS = [
     'Content-Type',
     'Authorization',
+    'X-CSRFToken',
 ]
 
 SESSION_COOKIE_SAMESITE = 'Lax'
