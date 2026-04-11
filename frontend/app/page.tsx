@@ -109,20 +109,20 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <div className="ml-2 w-full px-10 py-6">
-      <div className="mb-6 ml-1 flex items-start justify-between gap-4">
+      <div className="mb-6 ml-1 flex items-start justify-between">
         <div className="flex items-center text-2xl font-semibold">
           <Link
             href={`/?year=${prevMonthDate.getUTCFullYear()}&month=${prevMonthDate.getUTCMonth() + 1}`}
             className="hover:text-gray-400"
           >
-            ←
+            &lt;
           </Link>
           <div className="min-w-40 text-center font-semibold">{monthTitle}</div>
           <Link
             href={`/?year=${nextMonthDate.getUTCFullYear()}&month=${nextMonthDate.getUTCMonth() + 1}`}
             className="hover:text-gray-400"
           >
-            →
+            &gt;
           </Link>
         </div>
 
