@@ -1,20 +1,72 @@
 "use client"
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import HabitChart from './chart'
-import { Habit, Row } from './types'
+import { Habit, HabitsSummaryResponse, Row } from './types'
 
 type HabitTableProps = {
   habits: Habit[]
   initialRows: Row[]
   backendBaseUrl: string
   rowUnitPx: number
+  year: number
+  month: number
 }
 
-export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUnitPx }: HabitTableProps) {
+export default function HabitTable({
+  habits: initialHabits,
+  initialRows,
+  backendBaseUrl,
+  rowUnitPx,
+  year,
+  month,
+}: HabitTableProps) {
+  const [habits, setHabits] = useState<Habit[]>(initialHabits)
   const [rows, setRows] = useState<Row[]>(initialRows)
+
   const tableColumns = `56px minmax(300px, 5fr) repeat(${Math.max(habits.length, 1)}, minmax(0, 1fr))`
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadSummary() {
+      try {
+        const response = await fetch(
+          `${backendBaseUrl}/api/summary/?year=${year}&month=${month}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store',
+          }
+        )
+
+        if (!response.ok) {
+          return
+        }
+
+        const contentType = response.headers.get('content-type') ?? ''
+        if (!contentType.includes('application/json')) {
+          return
+        }
+
+        const data: HabitsSummaryResponse = await response.json()
+
+        if (!cancelled) {
+          setHabits(data.habits)
+          setRows(data.rows)
+        }
+      } catch {
+        // mock data 유지
+      }
+    }
+
+    void loadSummary()
+
+    return () => {
+      cancelled = true
+    }
+  }, [backendBaseUrl, year, month])
 
   const completedCounts = useMemo(
     () =>

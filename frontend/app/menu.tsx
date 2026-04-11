@@ -1,14 +1,12 @@
 "use client"
 
 import { ChangeEvent, SyntheticEvent, useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 type Mode = 'login' | 'register'
 
-const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL ?? 'http://127.0.0.1:8000'
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 
 export default function Menu() {
-  const router = useRouter()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
   const [mode, setMode] = useState<Mode>('login')
@@ -48,7 +46,7 @@ export default function Menu() {
 
       setMessage(mode === 'login' ? 'Logged in.' : 'Registered.')
       setAuthOpen(false)
-      router.refresh()
+      window.location.reload()
     } catch {
       setMessage('Network error. Check backend server and CORS settings.')
     } finally {

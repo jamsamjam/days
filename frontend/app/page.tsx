@@ -43,7 +43,7 @@ function buildMockSummary(year: number, month: number): HabitsSummaryResponse {
         '3': false,
       }
     } else if (day === 3) {
-      text = 'Yay.. I feel like I\'m getting back on track!'
+      text = "Yay.. I feel like I'm getting back on track!"
       checks = {
         '1': true,
         '2': true,
@@ -78,33 +78,7 @@ function buildMockSummary(year: number, month: number): HabitsSummaryResponse {
 }
 
 async function getSummaryData(year: number, month: number): Promise<HabitsSummaryResponse> {
-  const mock = buildMockSummary(year, month)
-
-  if (!BACKEND_BASE_URL) {
-    return mock
-  }
-
-  try {
-    const response = await fetch(
-      `${BACKEND_BASE_URL}/api/summary/?year=${year}&month=${month}`,
-      {
-        cache: 'no-store',
-      }
-    )
-
-    if (!response.ok) {
-      return mock
-    }
-
-    const contentType = response.headers.get('content-type') ?? ''
-    if (!contentType.includes('application/json')) {
-      return mock
-    }
-
-    return response.json()
-  } catch {
-    return mock
-  }
+  return buildMockSummary(year, month)
 }
 
 type HomeProps = {
@@ -158,8 +132,10 @@ export default async function Home({ searchParams }: HomeProps) {
       <HabitTable
         habits={data.habits}
         initialRows={data.rows}
-        backendBaseUrl={BACKEND_BASE_URL ?? 'http://127.0.0.1:8000'}
+        backendBaseUrl={BACKEND_BASE_URL ?? 'http://localhost:8000'}
         rowUnitPx={rowUnitPx}
+        year={requestedYear}
+        month={normalizedMonth}
       />
     </div>
   )
