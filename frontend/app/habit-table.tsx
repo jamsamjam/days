@@ -19,7 +19,7 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
   const completedCounts = useMemo(
     () =>
       rows.map((row) =>
-        habits.reduce((sum, habit) => sum + (row.checks[habit] ? 1 : 0), 0)
+        habits.reduce((sum, habit) => sum + (row.checks[String(habit.id)] ? 1 : 0), 0)
       ),
     [rows, habits]
   )
@@ -29,6 +29,10 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
   }
 
   const handleCommentClick = async (row: Row) => {
+    if (row.id < 0) {
+      return
+    }
+
     const nextText = window.prompt('Edit comment', row.text ?? '')
     if (nextText === null) {
       return
@@ -36,6 +40,7 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
 
     const response = await fetch(`${backendBaseUrl}/api/rows/${row.id}/comment/`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: nextText })
     })
@@ -51,10 +56,15 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
   }
 
   const handleHabitClick = async (row: Row, habit: Habit) => {
+    if (row.id < 0) {
+      return
+    }
+
     const response = await fetch(`${backendBaseUrl}/api/rows/${row.id}/check/`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ habit })
+      body: JSON.stringify({ habit_id: habit.id })
     })
 
     if (!response.ok) {
@@ -77,8 +87,8 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
           <div className="text-center font-semibold">Date</div>
           <div className="font-semibold">Comments</div>
           {habits.map((habit) => (
-            <div key={habit} className="text-center font-semibold capitalize">
-              {habit}
+            <div key={habit.id} className="text-center font-semibold capitalize">
+              {habit.name}
             </div>
           ))}
         </div>
@@ -104,14 +114,14 @@ export default function HabitTable({ habits, initialRows, backendBaseUrl, rowUni
 
             {habits.map((habit) => (
               <button
-                key={habit}
+                key={habit.id}
                 type="button"
                 onClick={() => {
                   void handleHabitClick(row, habit)
                 }}
                 className="cursor-pointer text-center hover:bg-gray-50"
               >
-                {row.checks[habit] === true ? 'O' : row.checks[habit] === false ? 'X' : ''}
+                {row.checks[String(habit.id)] === true ? 'O' : row.checks[String(habit.id)] === false ? 'X' : ''}
               </button>
             ))}
           </div>

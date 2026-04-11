@@ -1,10 +1,13 @@
-export type Habit = string
+export type Habit = {
+  id: number
+  name: string
+}
 
 export type Row = {
   id: number
   date: string
   text: string
-  checks: Partial<Record<string, boolean>>
+  checks: Record<string, boolean>
 }
 
 export type HabitsSummaryResponse = {
