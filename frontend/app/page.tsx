@@ -1,15 +1,10 @@
-import { Schoolbell } from 'next/font/google'
 import Link from 'next/link'
 import HabitTable from './habit-table'
 import Menu from './menu'
 import { HabitsSummaryResponse } from './types'
 
-const schoolbell = Schoolbell({
-  weight: '400',
-})
-
 const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
-const rowUnitPx = 35.1
+const rowUnitPx = 35
 
 function parsePositiveInt(value: string | undefined, fallback: number): number {
   if (!value) return fallback
@@ -139,7 +134,7 @@ export default async function Home({ searchParams }: HomeProps) {
   }).format(currentMonthDate)
 
   return (
-    <div className={`${schoolbell.className} ml-2 w-full px-10 py-6`}>
+    <div className="ml-2 w-full px-10 py-6">
       <div className="mb-6 ml-1 flex items-start justify-between gap-4">
         <div className="flex items-center text-2xl font-semibold">
           <Link

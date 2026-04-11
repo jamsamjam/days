@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Schoolbell } from 'next/font/google'
 import "./globals.css";
 
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const schoolbell = Schoolbell({
+  weight: '400',
+})
 
 export const metadata: Metadata = {
   title: "Good Habits",
@@ -26,9 +19,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className={`${schoolbell.className} min-h-screen flex flex-col`}>
+        {children}
+        <footer className="mt-5 mb-7 text-center text-sm text-gray-500 leading-6">
+          In the hope that everyone can build good habits. <br />
+          © 2025 jamsamjam. All rights reserved.
+        </footer>
+      </body>
     </html>
   );
 }
