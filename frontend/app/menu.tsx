@@ -379,17 +379,26 @@ export default function Menu() {
 
       {settingsOpen && (
         <div className="absolute right-0 top-11 z-20 w-[330px] rounded border border-gray-300 bg-white p-4 shadow-lg">
-          <div className="mb-3 text-lg font-semibold">How to use</div>
+          <div className="mb-3 text-lg font-medium">How to use</div>
           <p className="mb-4 text-sm leading-6 text-gray-700">
-            1. Click a comment cell to edit text.
+            1. Click a Comments cell to edit/add text.
             <br />
-            2. Click a habit cell to toggle O/X.
+            2. Click O/X cells to toggle.
             <br />
             3. Use arrows to move between months.
           </p>
 
+          <div className="mb-3 text-sm font-medium">For our Korean users...</div>
+          <p className="mb-4 text-sm leading-6 text-gray-700">
+            1. Comments 칸을 클릭하여 텍스트를 입력/수정해요.
+            <br />
+            2. O/X를 클릭하면 습관 달성 여부를 변경할 수 있어요.
+            <br />
+            3. 화살표를 사용해서 다른 월로 이동할 수 있어요.
+          </p>
+
           <div className="mt-4">
-            <div className="mb-2 text-base font-semibold">Add/Delete Habit</div>
+            <div className="mb-2 text-base font-medium">My Habits</div>
 
             <div className="flex items-center gap-2">
               <input

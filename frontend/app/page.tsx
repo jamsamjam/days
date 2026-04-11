@@ -132,7 +132,7 @@ export default async function Home({ searchParams }: HomeProps) {
       <HabitTable
         habits={data.habits}
         initialRows={data.rows}
-        backendBaseUrl={BACKEND_BASE_URL ?? 'http://localhost:8000'}
+        backendBaseUrl={BACKEND_BASE_URL!}
         rowUnitPx={rowUnitPx}
         year={requestedYear}
         month={normalizedMonth}
