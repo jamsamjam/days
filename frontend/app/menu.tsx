@@ -152,8 +152,6 @@ export default function Menu() {
     setMessage('')
 
     const csrftoken = getCookie('csrftoken')
-    console.log('logout csrftoken:', csrftoken)
-    console.log('frontend origin:', window.location.origin)
 
     try {
       const response = await fetch(`${BACKEND_BASE_URL}/users/api/logout/`, {
@@ -167,8 +165,6 @@ export default function Menu() {
       })
 
       const text = await response.text()
-      console.log('logout status:', response.status)
-      console.log('logout raw response:', text)
 
       if (!response.ok) {
         setMessage(`Logout failed. (${response.status})`)
