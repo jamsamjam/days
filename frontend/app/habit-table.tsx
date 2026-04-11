@@ -45,7 +45,7 @@ export default function HabitTable({
 
     async function loadSummary() {
       try {
-        await fetch(`${backendBaseUrl}/users/api/me/`, {
+        await fetch(`${backendBaseUrl}/api/auth/me/`, {
           method: 'GET',
           credentials: 'include',
           cache: 'no-store',

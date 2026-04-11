@@ -54,7 +54,7 @@ export default function Menu() {
   useEffect(() => {
     async function loadMe() {
       try {
-        const response = await fetch(`${BACKEND_BASE_URL}/users/api/me/`, {
+        const response = await fetch(`${BACKEND_BASE_URL}/api/auth/me/`, {
           method: 'GET',
           credentials: 'include',
           cache: 'no-store',
@@ -118,7 +118,7 @@ export default function Menu() {
     setLoading(true)
     setMessage('')
 
-    const path = mode === 'login' ? '/users/api/login/' : '/users/api/register/'
+    const path = mode === 'login' ? '/api/auth/login/' : '/api/auth/register/'
     const csrftoken = getCookie('csrftoken')
 
     try {
@@ -154,7 +154,7 @@ export default function Menu() {
     const csrftoken = getCookie('csrftoken')
 
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/users/api/logout/`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/auth/logout/`, {
         method: 'POST',
         credentials: 'include',
         headers: {
