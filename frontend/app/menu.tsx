@@ -298,18 +298,16 @@ export default function Menu() {
         {authenticated ? 'Logout' : 'Login'}
       </button>
 
-      {authenticated && (
-        <button
-          type="button"
-          onClick={() => {
-            setSettingsOpen((prev) => !prev)
-            setAuthOpen(false)
-          }}
-          className="text-sm hover:text-orange-400"
-        >
-          Settings
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => {
+          setSettingsOpen((prev) => !prev)
+          setAuthOpen(false)
+        }}
+        className="text-sm hover:text-orange-400"
+      >
+        Settings
+      </button>
 
       {authOpen && !authenticated && (
         <div className="absolute right-0 top-11 z-20 w-[330px] rounded border border-gray-300 bg-white p-4 shadow-lg">
@@ -397,8 +395,9 @@ export default function Menu() {
             3. 화살표를 사용해서 다른 월로 이동할 수 있어요.
           </p>
 
-          <div className="mt-4">
-            <div className="mb-2 text-base font-medium">My Habits</div>
+          {authenticated && (
+            <div className="mt-4">
+              <div className="mb-2 text-base font-medium">My Habits</div>
 
             <div className="flex items-center gap-2">
               <input
@@ -446,7 +445,7 @@ export default function Menu() {
             {habitMessage && (
               <p className="mt-2 text-xs text-gray-700">{habitMessage}</p>
             )}
-          </div>
+          </div>)}
         </div>
       )}
     </div>
