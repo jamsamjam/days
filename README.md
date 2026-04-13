@@ -33,3 +33,9 @@ cd /home/debian/days/frontend
 npm install
 npm run build
 pm2 restart nextjs
+
+
+### db
+
+docker exec -it postgres bash 
+psql -U postgres -d days
