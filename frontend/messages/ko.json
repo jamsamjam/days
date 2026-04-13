@@ -1,6 +1,6 @@
 {
   "Menu": {   
-    "hello_user": "{{username}}님, 안녕하세요!",
+    "hello_user": "{username}님, 안녕하세요!",
     "login": "로그인",
     "logout": "로그아웃",
     "settings": "설정",
@@ -26,9 +26,9 @@
     "failed_to_create_habit": "습관 추가에 실패했습니다.",
     "failed_to_delete_habit": "습관 삭제에 실패했습니다.",
     "habit_added": "습관이 추가되었습니다.",
-    "request_failed_with_status": "요청에 실패했습니다. ({{status}})",
-    "logout_failed_with_status": "로그아웃에 실패했습니다. ({{status}})",
-    "delete_habit_confirm": "\"{{name}}\" 습관을 삭제할까요?\n\n이 습관의 모든 기록도 함께 삭제됩니다."
+    "request_failed_with_status": "요청에 실패했습니다. ({status})",
+    "logout_failed_with_status": "로그아웃에 실패했습니다. ({status})",
+    "delete_habit_confirm": "\"{name}\" 습관을 삭제할까요?\n\n이 습관의 모든 기록도 함께 삭제됩니다."
   },
 
   "HabitTable": {
