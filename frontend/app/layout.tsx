@@ -27,7 +27,8 @@ export default function RootLayout({
           In the hope that everyone can build good habits. <br />
           © 2025 Sam<br /> <br />
           <a href="/privacy" className="underline ml-1">Privacy</a> - 
-          <a href="/terms" className="underline ml-1">Terms of Use</a>
+          <a href="/terms" className="underline ml-1">Terms of Use</a> -
+          <a href="https://github.com/jamsamjam/days" className="underline ml-1">Github</a>
         </footer>
       </body>
     </html>
