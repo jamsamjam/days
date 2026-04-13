@@ -100,12 +100,14 @@ export default function HabitTable({
   }
 
   const handleCommentClick = async (row: Row) => {
-    if (row.id < 0) {
+    const nextText = window.prompt('Edit comment', row.text ?? '')
+    if (nextText === null) {
       return
     }
 
-    const nextText = window.prompt('Edit comment', row.text ?? '')
-    if (nextText === null) {
+    if (row.id < 0) {
+      // Mock/example row -> update local state only
+      updateRowInState({ ...row, text: nextText })
       return
     }
 
@@ -135,6 +137,13 @@ export default function HabitTable({
 
   const handleHabitClick = async (row: Row, habit: Habit) => {
     if (row.id < 0) {
+      // Mock/example row -> toggle locally
+      const current = row.checks[String(habit.id)]
+      const next = current === true ? false : true
+      updateRowInState({
+        ...row,
+        checks: { ...row.checks, [habit.id]: next },
+      })
       return
     }
 
@@ -170,8 +179,10 @@ export default function HabitTable({
           <div className="text-center font-semibold">Date</div>
           <div className="font-semibold">Comments</div>
           {habits.map((habit) => (
-            <div key={habit.id} className="text-center font-semibold capitalize">
-              {habit.name}
+            <div key={habit.id} className="min-w-0">
+              <div className="truncate text-center font-semibold capitalize">
+                {habit.name}
+              </div>
             </div>
           ))}
         </div>
@@ -192,7 +203,7 @@ export default function HabitTable({
               }}
               className="min-w-0 cursor-pointer text-left hover:bg-gray-50"
             >
-              <p>{row.text}</p>
+              <p className="truncate">{row.text}</p>
             </button>
 
             {habits.map((habit) => (
