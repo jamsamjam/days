@@ -1,6 +1,7 @@
 "use client"
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 type Mode = 'login' | 'register'
 
@@ -36,6 +37,8 @@ function getCookie(name: string): string | null {
 }
 
 export default function Menu() {
+  const t = useTranslations('Menu')
+
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
   const [mode, setMode] = useState<Mode>('login')
@@ -111,7 +114,7 @@ export default function Menu() {
     event.preventDefault()
 
     if (mode === 'register' && password !== passwordConfirm) {
-      setMessage('Passwords do not match.')
+      setMessage(t('passwords_do_not_match'))
       return
     }
 
@@ -134,14 +137,14 @@ export default function Menu() {
 
       const data = await response.json().catch(() => ({}))
       if (!response.ok) {
-        setMessage(data.detail ?? `Request failed. (${response.status})`)
+        setMessage(data.detail ?? t('request_failed_with_status', { status: response.status }))
         return
       }
 
       setAuthOpen(false)
       window.location.reload()
     } catch {
-      setMessage('Network error.')
+      setMessage(t('network_error'))
     } finally {
       setLoading(false)
     }
@@ -164,16 +167,14 @@ export default function Menu() {
         body: JSON.stringify({}),
       })
 
-      const text = await response.text()
-
       if (!response.ok) {
-        setMessage(`Logout failed. (${response.status})`)
+        setMessage(t('logout_failed_with_status', { status: response.status }))
         return
       }
 
       window.location.reload()
     } catch {
-      setMessage('Network error.')
+      setMessage(t('network_error'))
     } finally {
       setLoading(false)
     }
@@ -182,7 +183,7 @@ export default function Menu() {
   async function handleHabitCreate() {
     const trimmed = habitName.trim()
     if (!trimmed) {
-      setHabitMessage('Please enter a habit name.')
+      setHabitMessage(t('please_enter_habit_name'))
       return
     }
 
@@ -205,15 +206,15 @@ export default function Menu() {
       const data = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        setHabitMessage(data.detail ?? 'Failed to create habit.')
+        setHabitMessage(data.detail ?? t('failed_to_create_habit'))
         return
       }
 
       setHabitName('')
-      setHabitMessage('Habit added.')
+      setHabitMessage(t('habit_added'))
       window.location.reload()
     } catch {
-      setHabitMessage('Network error.')
+      setHabitMessage(t('network_error'))
     } finally {
       setLoading(false)
     }
@@ -221,7 +222,7 @@ export default function Menu() {
 
   async function handleHabitDelete(habit: Habit) {
     const confirmed = window.confirm(
-      `Delete "${habit.name}"?\n\nAll records for this habit will also be removed.`
+      t('delete_habit_confirm', { name: habit.name })
     )
 
     if (!confirmed) {
@@ -245,13 +246,13 @@ export default function Menu() {
       const data = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        setHabitMessage(data.detail ?? 'Failed to delete habit.')
+        setHabitMessage(data.detail ?? t('failed_to_delete_habit'))
         return
       }
 
       window.location.reload()
     } catch {
-      setHabitMessage('Network error.')
+      setHabitMessage(t('network_error'))
     } finally {
       setLoading(false)
     }
@@ -277,7 +278,7 @@ export default function Menu() {
     <div className="relative flex items-center gap-4 pr-8">
       {authenticated && (
         <p className="text-sm text-orange-300">
-          Hello, {currentUsername}!
+          {t('hello_user', { username: currentUsername })}
         </p>
       )}
 
@@ -295,7 +296,7 @@ export default function Menu() {
         }}
         className="text-sm hover:text-orange-400"
       >
-        {authenticated ? 'Logout' : 'Login'}
+        {authenticated ? t('logout') : t('login')}
       </button>
 
       <button
@@ -306,20 +307,20 @@ export default function Menu() {
         }}
         className="text-sm hover:text-orange-400"
       >
-        Settings
+        {t('settings')}
       </button>
 
       {authOpen && !authenticated && (
         <div className="absolute right-0 top-11 z-20 w-[330px] rounded border border-gray-300 bg-white p-4 shadow-lg">
           <div className="mb-3 text-base font-semibold text-center">
-            {mode === 'login' ? 'Login' : 'Sign up'}
+            {mode === 'login' ? t('login') : t('sign_up')}
           </div>
 
           <form onSubmit={handleAuthSubmit} className="space-y-2">
             <input
               value={username}
               onChange={onUsernameChange}
-              placeholder="Username"
+              placeholder={t('username')}
               className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
               required
             />
@@ -328,7 +329,7 @@ export default function Menu() {
                 type="email"
                 value={email}
                 onChange={onEmailChange}
-                placeholder="Email"
+                placeholder={t('email')}
                 className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
                 required
               />
@@ -337,7 +338,7 @@ export default function Menu() {
               type="password"
               value={password}
               onChange={onPasswordChange}
-              placeholder="Password"
+              placeholder={t('password')}
               className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
               required
             />
@@ -346,7 +347,7 @@ export default function Menu() {
                 type="password"
                 value={passwordConfirm}
                 onChange={onPasswordConfirmChange}
-                placeholder="Confirm password"
+                placeholder={t('confirm_password')}
                 className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
                 required
               />
@@ -356,7 +357,7 @@ export default function Menu() {
               type="submit"
               className="w-full rounded bg-black px-3 py-2 text-sm text-white disabled:opacity-60"
             >
-              {loading ? 'Please wait...' : mode === 'login' ? 'Login' : 'Sign up'}
+              {loading ? t('please_wait') : mode === 'login' ? t('login') : t('sign_up')}
             </button>
 
             <button
@@ -367,7 +368,7 @@ export default function Menu() {
               }}
               className="w-full text-center text-xs text-gray-600 underline underline-offset-2 hover:text-gray-900"
             >
-              {mode === 'login' ? 'New here?' : 'Already have an account?'}
+              {mode === 'login' ? t('new_here') : t('already_have_account')}
             </button>
           </form>
 
@@ -377,75 +378,67 @@ export default function Menu() {
 
       {settingsOpen && (
         <div className="absolute right-0 top-11 z-20 w-[330px] rounded border border-gray-300 bg-white p-4 shadow-lg">
-          <div className="mb-3 text-lg font-medium">How to use</div>
+          <div className="mb-3 text-lg font-medium">{t('how_to_use')}</div>
           <p className="mb-4 text-sm leading-6 text-gray-700">
-            1. Click a Comments cell to edit/add text.
+            {t('how_to_use_1')}
             <br />
-            2. Click O/X cells to toggle.
+            {t('how_to_use_2')}
             <br />
-            3. Use arrows to move between months.
-          </p>
-
-          <div className="mb-3 text-sm font-medium">For our Korean users...</div>
-          <p className="mb-4 text-sm leading-6 text-gray-700">
-            1. Comments 칸을 클릭하여 텍스트를 입력/수정해요.
-            <br />
-            2. O/X를 클릭하면 습관 달성 여부를 변경할 수 있어요.
-            <br />
-            3. 화살표를 사용해서 다른 월로 이동할 수 있어요.
+            {t('how_to_use_3')}
           </p>
 
           {authenticated && (
             <div className="mt-4">
-              <div className="mb-2 text-base font-medium">My Habits</div>
+              <div className="mb-2 text-base font-medium">{t('my_habits')}</div>
 
-            <div className="flex items-center gap-2">
-              <input
-                value={habitName}
-                onChange={(event) => setHabitName(event.target.value)}
-                placeholder="New habit"
-                className="h-9 w-full rounded border border-gray-300 px-3 text-sm outline-none focus:border-gray-500"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  void handleHabitCreate()
-                }}
-                disabled={loading}
-                className="h-9 rounded bg-black px-4 text-sm text-white disabled:opacity-60"
-              >
-                Add
-              </button>
-            </div>
-
-            <div className="mt-3 space-y-2">
-              {habits.map((habit) => (
-                <div
-                  key={habit.id}
-                  className="flex items-center justify-between gap-3 px-3 py-2"
+              <div className="flex items-center gap-2">
+                <input
+                  value={habitName}
+                  onChange={(event) => setHabitName(event.target.value)}
+                  placeholder={t('new_habit')}
+                  className="h-9 w-full rounded border border-gray-300 px-3 text-sm outline-none focus:border-gray-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    void handleHabitCreate()
+                  }}
+                  disabled={loading}
+                  className="h-9 rounded bg-black px-4 text-sm text-white disabled:opacity-60"
                 >
-                  <p className="min-w-0 flex-1 truncate text-sm text-gray-700">
-                    {habit.name}
-                  </p>
+                  {t('add')}
+                </button>
+              </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      void handleHabitDelete(habit)
-                    }}
-                    disabled={loading}
-                    className="rounded border border-gray-300 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60"
+              <div className="mt-3 space-y-2">
+                {habits.map((habit) => (
+                  <div
+                    key={habit.id}
+                    className="flex items-center justify-between gap-3 px-3 py-2"
                   >
-                    Delete
-                  </button>
-                </div>
-              ))}
-            </div>
+                    <p className="min-w-0 flex-1 truncate text-sm text-gray-700">
+                      {habit.name}
+                    </p>
 
-            {habitMessage && (
-              <p className="mt-2 text-xs text-gray-700">{habitMessage}</p>
-            )}
-          </div>)}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void handleHabitDelete(habit)
+                      }}
+                      disabled={loading}
+                      className="rounded border border-gray-300 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-60"
+                    >
+                      {t('delete')}
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {habitMessage && (
+                <p className="mt-2 text-xs text-gray-700">{habitMessage}</p>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server';
 import HabitTable from './habit-table'
 import Menu from './menu'
 import { HabitsSummaryResponse } from './types'
@@ -89,6 +90,8 @@ type HomeProps = {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
+  const t = await getTranslations('Home');
+
   const params = (await searchParams) ?? {}
   const now = new Date()
   const requestedYear = parsePositiveInt(params.year, now.getFullYear())

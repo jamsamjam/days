@@ -1,0 +1,38 @@
+{
+  "Menu": {
+    "hello_user": "Hello, {{username}}!",
+    "login": "Login",
+    "logout": "Logout",
+    "settings": "Settings",
+    "sign_up": "Sign up",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "please_wait": "Please wait...",
+    "new_here": "New here?",
+    "already_have_account": "Already have an account?",
+    "how_to_use": "How to use",
+    "how_to_use_1": "1. Click a Comments cell to edit or add text.",
+    "how_to_use_2": "2. Click O/X cells to toggle.",
+    "how_to_use_3": "3. Use arrows to move between months.",
+    "my_habits": "My Habits",
+    "new_habit": "New habit",
+    "add": "Add",
+    "delete": "Delete",
+    "passwords_do_not_match": "Passwords do not match.",
+    "network_error": "Network error.",
+    "please_enter_habit_name": "Please enter a habit name.",
+    "failed_to_create_habit": "Failed to create habit.",
+    "failed_to_delete_habit": "Failed to delete habit.",
+    "habit_added": "Habit added.",
+    "request_failed_with_status": "Request failed. ({{status}})",
+    "logout_failed_with_status": "Logout failed. ({{status}})",
+    "delete_habit_confirm": "Delete \"{{name}}\"?\n\nAll records for this habit will also be removed."
+  },
+
+  "HabitTable": {
+    "date": "Date",
+    "comments": "Comments"
+  }
+}

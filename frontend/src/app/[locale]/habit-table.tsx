@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 import HabitChart from './chart'
 import { Habit, HabitsSummaryResponse, Row } from './types'
@@ -35,6 +36,8 @@ export default function HabitTable({
   year,
   month,
 }: HabitTableProps) {
+  const t = useTranslations('HabitTable')
+
   const [habits, setHabits] = useState<Habit[]>(initialHabits)
   const [rows, setRows] = useState<Row[]>(initialRows)
 
@@ -176,8 +179,8 @@ export default function HabitTable({
           className="mb-2 grid gap-2 border-b border-gray-400 pb-2"
           style={{ gridTemplateColumns: tableColumns }}
         >
-          <div className="text-center font-semibold">Date</div>
-          <div className="font-semibold">Comments</div>
+          <div className="text-center font-semibold">{t('date')}</div>
+          <div className="font-semibold">{t('comments')}</div>
           {habits.map((habit) => (
             <div key={habit.id} className="min-w-0">
               <div className="truncate text-center font-semibold capitalize">
