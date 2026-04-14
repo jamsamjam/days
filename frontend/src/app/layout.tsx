@@ -12,14 +12,24 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children
-}: {
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html className="h-full antialiased">
+    <html
+      lang="en"
+      className={`h-full antialiased`}
+    >
       <body className={`${schoolbell.className} min-h-screen flex flex-col`}>
         {children}
+        <footer className="mt-5 mb-7 text-center text-sm text-gray-500 leading-6">
+          In the hope that everyone can build good habits. <br />
+          © 2026 Sam<br /> <br />
+          <a href="/privacy" className="underline ml-1">Privacy</a> - 
+          <a href="/terms" className="underline ml-1">Terms of Use</a> -
+          <a href="https://github.com/jamsamjam/days" className="underline ml-1">Github</a>
+        </footer>
       </body>
     </html>
   );
