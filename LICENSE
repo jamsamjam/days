@@ -1,4 +1,9 @@
-This project includes code from next-intl example (https://github.com/amannn/next-intl)
+This project includes code from next-intl example (https://github.com/amannn/next-intl).
+
+Specifically and only the following file are included:
+- frontend/src/components/local-switcher.tsx
+- frontend/src/components/local-switcher-selector.tsx 
+
 Copyright (c) 2023 amannn
 
 Licensed under the MIT License.
