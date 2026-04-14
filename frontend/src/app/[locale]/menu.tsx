@@ -1,7 +1,10 @@
 "use client"
 
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { ChangeEvent, SyntheticEvent, useEffect, useState, useTransition } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
+import { Locale } from 'next-intl'
+import { usePathname, useRouter } from '@/src/i18n/navigation'
 
 type Mode = 'login' | 'register'
 
@@ -38,6 +41,11 @@ function getCookie(name: string): string | null {
 
 export default function Menu() {
   const t = useTranslations('Menu')
+  const locale = useLocale()
+  const router = useRouter()
+  const pathname = usePathname()
+  const params = useParams()
+  const [isPending, startTransition] = useTransition()
 
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
@@ -109,6 +117,16 @@ export default function Menu() {
       void loadHabits()
     }
   }, [])
+
+  function handleLocaleChange(nextLocale: Locale) {
+    startTransition(() => {
+      router.replace(
+        // @ts-expect-error Current route params match current pathname
+        { pathname, params },
+        { locale: nextLocale }
+      )
+    })
+  }
 
   async function handleAuthSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault()
@@ -281,6 +299,18 @@ export default function Menu() {
           {t('hello_user', { username: currentUsername })}
         </p>
       )}
+
+      <button
+        type="button"
+        onClick={() => {
+          const nextLocale: Locale = locale === 'ko' ? 'en' : 'ko'
+          handleLocaleChange(nextLocale)
+        }}
+        disabled={isPending}
+        className="text-sm hover:text-orange-400 disabled:opacity-60"
+      >
+        {locale === 'ko' ? 'EN' : '한국어'}
+      </button>
 
       <button
         type="button"
